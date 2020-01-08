@@ -10,7 +10,9 @@ require.config({
     'underscore': 'vendor/underscore',
     'backbone': 'vendor/backbone',
     'bootstrap': 'vendor/bootstrap',
-    'datatables': 'vendor/jquery.dataTables',
+
+    'datatables': 'vendor/jquery.dataTables.min',
+
 
     'utils': 'utils',
     'run-job-view': 'views/jobs/run-job-view',
@@ -39,22 +41,23 @@ require.config({
 });
 
 define(['utils',
-        'run-job-view',
-        'edit-job-view',
-        'text!job-row-name',
-        'text!job-row-action',
-        'backbone',
-        'bootstrap',
-        'datatables'], function(utils,
-                                RunJobView,
-                                EditJobView,
-                                JobRowNameHtml,
-                                JobRowActionHtml) {
+  'run-job-view',
+  'edit-job-view',
+  'text!job-row-name',
+  'text!job-row-action',
+  'backbone',
+  'bootstrap',
+  'datatables'
+], function (utils,
+  RunJobView,
+  EditJobView,
+  JobRowNameHtml,
+  JobRowActionHtml) {
   'use strict';
 
   return Backbone.View.extend({
 
-    initialize: function() {
+    initialize: function () {
       this.listenTo(this.collection, 'sync', this.render);
       this.listenTo(this.collection, 'request', this.requestRender);
       this.listenTo(this.collection, 'reset', this.resetRender);
@@ -66,7 +69,13 @@ define(['utils',
       // Initialize data table
       this.table = $('#jobs-table').dataTable({
         // Sorted by job name
-        'order': [[0, 'asc']]
+
+        "language": {
+          "url": "/static/js/vendor/Chinese.json"
+        },
+        'order': [
+          [0, 'asc']
+        ]
       });
     },
 
@@ -77,7 +86,7 @@ define(['utils',
      * @param {object} response
      * @param {object} options
      */
-    requestError: function(model, response, options) {
+    requestError: function (model, response, options) {
       this.spinner.stop();
       utils.alertError('Request failed: ' + response.responseText);
     },
@@ -85,7 +94,7 @@ define(['utils',
     /**
      * Event handler for starting to make network request.
      */
-    requestRender: function() {
+    requestRender: function () {
       this.table.fnClearTable();
       this.spinner = utils.startSpinner('jobs-spinner');
     },
@@ -97,7 +106,7 @@ define(['utils',
      * dropdown, as well as this collection.  When called from the collection, no parameter
      * is given.
      */
-    resetRender: function(e) {
+    resetRender: function (e) {
       // It'll trigger sync event
       if (e) {
         e.preventDefault();
@@ -108,13 +117,13 @@ define(['utils',
     /**
      * Event handler for finishing fetching jobs data.
      */
-    render: function() {
+    render: function () {
       var jobs = this.collection.jobs;
 
       var data = [];
 
       // Build up data to pass to data tables
-      _.each(jobs, function(job) {
+      _.each(jobs, function (job) {
         var jobObj = job.toJSON();
         data.push([
           _.template(JobRowNameHtml)({

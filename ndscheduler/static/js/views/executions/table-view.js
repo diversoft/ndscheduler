@@ -10,7 +10,7 @@ require.config({
     'underscore': 'vendor/underscore',
     'backbone': 'vendor/backbone',
     'bootstrap': 'vendor/bootstrap',
-    'datatables': 'vendor/jquery.dataTables',
+    'datatables': 'vendor/jquery.dataTables.min',
 
     'utils': 'utils',
     'text': 'vendor/text',
@@ -35,14 +35,15 @@ require.config({
 });
 
 define(['utils',
-        'text!execution-result',
-        'backbone',
-        'bootstrap',
-        'datatables'], function(utils, ExecutionResultHtml) {
+  'text!execution-result',
+  'backbone',
+  'bootstrap',
+  'datatables'
+], function (utils, ExecutionResultHtml) {
   'use strict';
 
   return Backbone.View.extend({
-    initialize: function() {
+    initialize: function () {
       $('body').append(ExecutionResultHtml);
 
       this.listenTo(this.collection, 'sync', this.render);
@@ -51,17 +52,24 @@ define(['utils',
 
       this.table = $('#executions-table').dataTable({
         // Sorted by last updated time
-        'order': [[3, 'desc']],
+        'order': [
+          [3, 'desc']
+        ],
         // Disable sorting on result column
-        "columnDefs": [
-          { "orderable": false, "className": "table-result-column", "targets": 5 }
-        ]
+        "language": {
+          "url": "/static/js/vendor/Chinese.json"
+        },
+        "columnDefs": [{
+          "orderable": false,
+          "className": "table-result-column",
+          "targets": 5
+        }]
       });
-      
+
       $('#executions-table').on('draw.dt', function () {
         var buttons = $('[data-action=show-result]');
-        _.each(buttons, function(btn) {
-          $(btn).on('click', _.bind(function(e) {
+        _.each(buttons, function (btn) {
+          $(btn).on('click', _.bind(function (e) {
             e.preventDefault();
             $('#result-box').text(decodeURI($(btn).data('content')));
             $('#execution-result-modal').modal();
@@ -83,7 +91,7 @@ define(['utils',
      * @param {object} response
      * @param {object} options
      */
-    requestError: function(model, response, options) {
+    requestError: function (model, response, options) {
       this.spinner.stop();
       utils.alertError('Request failed: ' + response.responseText);
     },
@@ -91,7 +99,7 @@ define(['utils',
     /**
      * Event handler for starting to send network request.
      */
-    requestRender: function() {
+    requestRender: function () {
       this.table.fnClearTable();
       this.spinner = utils.startSpinner('executions-spinner');
     },
@@ -99,11 +107,11 @@ define(['utils',
     /**
      * Event handler for finishing fetching execution data.
      */
-    render: function() {
+    render: function () {
       var executions = this.collection.executions;
 
       var data = [];
-      _.each(executions, function(execution) {
+      _.each(executions, function (execution) {
         data.push([
           execution.getNameHTMLString(),
           execution.getStatusHTMLString(),

@@ -11,10 +11,13 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="static/css/vendor/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="static/css/vendor/bootstrap-switch.css" rel="stylesheet" type="text/css">
-    <link href="static/css/vendor/jquery.dataTables.css" rel="stylesheet" type="text/css">
+    <link href="static/css/vendor/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
     <link href="static/css/vendor/select2.css" rel="stylesheet" type="text/css">
     <link href="static/css/vendor/select2-bootstrap.css" rel="stylesheet" type="text/css">
     <link href="static/css/main.css" rel="stylesheet" type="text/css">
+	<link href="static/css/main.css" rel="stylesheet" type="text/css">
+	<script src="https://cdn.datatables.net/plug-ins/1.10.20/i18n/Chinese.json"></script>
+	
 
     <script>
         var DEFAULT_CACHE_BUSTER = (new Date()).getTime();
@@ -28,24 +31,24 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
+            <span class="sr-only">切换导航</span>
             <i class="icon-bar"></i>
             <i class="icon-bar"></i>
             <i class="icon-bar"></i>
           </button>
-          <span class="navbar-brand">Nextdoor Scheduler</span>
+          <span class="navbar-brand">定期任务管理器</span>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li id="jobs-tab"><a href="#jobs">Jobs</a></li>
-            <li id="executions-tab"><a href="#executions">Executions</a></li>
-            <li id="logs-tab"><a href="#logs">Audit Logs</a></li>
-            <li class="dropdown">
+            <li id="jobs-tab"><a href="#jobs">任务</a></li>
+            <li id="executions-tab"><a href="#executions">执行情况</a></li>
+            <li id="logs-tab"><a href="#logs">日志</a></li>
+            <!--<li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <i class="caret"></i></a>
                 <ul class="dropdown-menu">
                     <li><a href="https://github.com/Nextdoor/ndscheduler" target="_blank">ndscheduler GitHub page</a></li>
                 </ul>
-            </li>
+            </li>-->
           </ul>
         </div>
       </div>
@@ -57,20 +60,20 @@
                 <div id="jobs-page-sidebar" style="display:none">
                     <form role="form">
                         <div class="form-group">
-                            <a id="add-job-button" data-toggle="modal" data-target="#add-job-modal" class=" form-control btn btn-primary">New Job</a>
+                            <a id="add-job-button" data-toggle="modal" data-target="#add-job-modal" class=" form-control btn btn-primary">新建任务</a>
                         </div>
                         <div class="form-group">
-                            <button class="form-control btn btn-primary" id="jobs-refresh-button">Refresh</button>
+                            <button class="form-control btn btn-primary" id="jobs-refresh-button">刷新</button>
                         </div>
                     </form>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading">Statistics</div>
+                        <div class="panel-heading">任务统计</div>
                         <div class="panel-body" id="jobs-stats">
                             <small>
-                            Total: <span id="jobs-total-count">-</span><br>
-                            <span class="success-color">Active: <span id="jobs-active-count">-</span> </span><br>
-                            <span class="failed-color">Inactive: <span id="jobs-inactive-count">-</span> </span>
+                            全部: <span id="jobs-total-count">-</span><br>
+                            <span class="success-color">活动数量: <span id="jobs-active-count">-</span> </span><br>
+                            <span class="failed-color">非活动数量: <span id="jobs-inactive-count">-</span> </span>
                             </small>
                         </div>
                     </div>
@@ -79,26 +82,26 @@
                 <div id="executions-page-sidebar" style="display:none">
                     <div class="form-group">
                         <select class="form-control" id="filter-time-range">
-                            <option value="600">10 minutes</option>
-                            <option value="3600">1 hour</option>
-                            <option value="43200">12 hours</option>
-                            <option value="86400">24 hours</option>
+                            <option value="600">10 分钟</option>
+                            <option value="3600">1 小时</option>
+                            <option value="43200">12 小时</option>
+                            <option value="86400">24 小时</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <button class=" form-control btn btn-primary" id="filter-button">Refresh</button>
+                        <button class=" form-control btn btn-primary" id="filter-button">刷新</button>
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading">Statistics</div>
+                        <div class="panel-heading">执行情况统计</div>
                         <div class="panel-body">
                             <small>
-                            Total: <span id="executions-total-count">-</span><br>
+                            全部: <span id="executions-total-count">-</span><br>
                             <span class="scheduled-color">Scheduled: <span id="executions-scheduled-count">-</span></span><br>
-                            <span class="running-color">Running: <span id="executions-running-count">-</span></span><br>
-                            <span class="success-color">Success: <span id="executions-success-count">-</span></span><br>
-                            <span class="scheduled-error-color">Scheduled Error: <span id="executions-scheduled-error-count">-</span></span><br>
-                            <span class="failed-color">Failed: <span id="executions-failed-count">-</span></span>
+                            <span class="running-color">正在运行: <span id="executions-running-count">-</span></span><br>
+                            <span class="success-color">已成功: <span id="executions-success-count">-</span></span><br>
+                            <span class="scheduled-error-color">Scheduled 错误: <span id="executions-scheduled-error-count">-</span></span><br>
+                            <span class="failed-color">失败: <span id="executions-failed-count">-</span></span>
                             </small>
                         </div>
                     </div>
@@ -107,14 +110,14 @@
                 <div id="logs-page-sidebar" style="display:none">
                     <div class="form-group">
                         <select class="form-control" id="logs-filter-time-range">
-                            <option value="600">10 minutes</option>
-                            <option value="3600">1 hour</option>
-                            <option value="43200">12 hours</option>
-                            <option value="86400">24 hours</option>
+                            <option value="600">10 分钟</option>
+                            <option value="3600">1 小时</option>
+                            <option value="43200">12 小时</option>
+                            <option value="86400">24 小时</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <button class=" form-control btn btn-primary" id="logs-filter-button">Refresh</button>
+                        <button class=" form-control btn btn-primary" id="logs-filter-button">刷新</button>
                     </div>
                 </div> <!-- logs-page-sidebar -->
             </div>
@@ -123,15 +126,15 @@
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
                 <div id="jobs-page-content" style="display:none">
-                    <h2 class="sub-header">Jobs</h2>
+                    <h2 class="sub-header">任务</h2>
                     <div class="table-responsive">
                         <table class="table table-striped display" id="jobs-table">
                             <thead>
                                 <tr>
-                                    <th>Job Name</th>
-                                    <th>Schedule (UTC)</th>
-                                    <th>Next Run</th>
-                                    <th>Action</th>
+                                    <th>任务名称</th>
+                                    <th>执行时间 (UTC)</th>
+                                    <th>下次运行</th>
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody id="jobs-table-body">
@@ -142,16 +145,16 @@
                 </div> <!-- jobs-page-content -->
 
                 <div id="executions-page-content"  style="display:none">
-                    <h2 class="sub-header">Executions</h2>
+                    <h2 class="sub-header">执行情况</h2>
                     <div class="table-responsive">
                         <table class="table table-striped" id="executions-table">
                             <thead>
                             <tr>
-                                <th>Job Name</th>
-                                <th>Status</th>
-                                <th>Scheduled At (local)</th>
-                                <th>Last Updated At (local)</th>
-                                <th>Description</th>
+                                <th>任务名称</th>
+                                <th>状态</th>
+                                <th>安排时间(本地时间)</th>
+                                <th>上次更新(本地时间)</th>
+                                <th>描述</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -164,16 +167,16 @@
                 </div> <!-- executions-page-content -->
 
                 <div id="logs-page-content" style="display:none">
-                    <h2 class="sub-header">Audit Logs</h2>
+                    <h2 class="sub-header">检查日志</h2>
                     <div class="table-responsive">
                         <table class="table table-striped" id="logs-table">
                             <thead>
                             <tr>
-                                <th>Job Name</th>
-                                <th>Event</th>
-                                <th>User</th>
-                                <th>Time (local)</th>
-                                <th>Description</th>
+                                <th>任务名称</th>
+                                <th>事件</th>
+                                <th>用户</th>
+                                <th>本地时间</th>
+                                <th>描述</th>
                             </tr>
                             </thead>
                             <tbody id="logs-table-body">

@@ -10,7 +10,7 @@ require.config({
     'underscore': 'vendor/underscore',
     'backbone': 'vendor/backbone',
     'bootstrap': 'vendor/bootstrap',
-    'datatables': 'vendor/jquery.dataTables',
+    'datatables': 'vendor/jquery.dataTables.min',
 
     'utils': 'utils'
   },
@@ -33,15 +33,16 @@ require.config({
 });
 
 define(['utils',
-        'backbone',
-        'bootstrap',
-        'datatables'], function(utils) {
+  'backbone',
+  'bootstrap',
+  'datatables'
+], function (utils) {
 
   'use strict';
 
   return Backbone.View.extend({
 
-    initialize: function() {
+    initialize: function () {
       this.listenTo(this.collection, 'sync', this.render);
       this.listenTo(this.collection, 'request', this.requestRender);
       this.listenTo(this.collection, 'reset', this.resetRender);
@@ -49,14 +50,19 @@ define(['utils',
       // Initialize data table
       this.table = $('#logs-table').dataTable({
         // Sorted by job name
-        'order': [[3, 'desc']]
+        "language": {
+          "url": "/static/js/vendor/Chinese.json"
+        },
+        'order': [
+          [3, 'desc']
+        ]
       });
     },
 
     /**
      * Event handler for starting to make network request.
      */
-    requestRender: function() {
+    requestRender: function () {
       this.table.fnClearTable();
       this.spinner = utils.startSpinner('logs-spinner');
     },
@@ -64,7 +70,7 @@ define(['utils',
     /**
      * Event handler for resetting logs data.
      */
-    resetRender: function() {
+    resetRender: function () {
       // It'll trigger sync event
       this.collection.getLogs();
     },
@@ -72,13 +78,13 @@ define(['utils',
     /**
      * Event handler for finishing fetching jobs data.
      */
-    render: function() {
+    render: function () {
       var logs = this.collection.logs;
 
       var data = [];
 
       // Build up data to pass to data tables
-      _.each(logs, function(log) {
+      _.each(logs, function (log) {
         var logObj = log.toJSON();
         data.push([
           log.getJobNameHTMLString(),

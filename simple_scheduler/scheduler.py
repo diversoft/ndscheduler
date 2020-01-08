@@ -10,11 +10,16 @@ class SimpleServer(server.SchedulerServer):
         jobs = self.scheduler_manager.get_jobs()
         if len(jobs) == 0:
             self.scheduler_manager.add_job(
-                job_class_string='simple_scheduler.jobs.sample_job.AwesomeJob',
+                job_class_string='jobs.sample_job.AwesomeJob',
                 name='My Awesome Job',
-                pub_args=['first parameter', {'second parameter': 'can be a dict'}],
+                pub_args=['first parameter', {
+                    'second parameter': 'can be a dict'}],
                 minute='*/1')
 
 
-if __name__ == "__main__":
+def main():
     SimpleServer.run()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,9 +1,9 @@
 <% if (job.notes.length > 0) { %>
-    <b>Notes</b>: <%- job.notes %><br>
+    <b>注意</b>: <%- job.notes %><br>
 <% } %>
 
 <% if (job.arguments.length > 0) { %>
-    <b>Arguments:</b>
+    <b>参数:</b>
     <ol>
         <% _.forEach(job.arguments, function(argument) { %>
             <li>(<%- argument.type %>) <%- argument.description %></li>
